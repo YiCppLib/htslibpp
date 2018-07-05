@@ -10,13 +10,10 @@
 
 namespace YiCppLib {
     namespace HTSLibpp {
-        // The next thing we need to do is to look at the content of the 
-        // file once it is open. hts files are separated into two sections,
-        // the header and the actual records. in htslib, the header is
-        // represented by the type bcf_hdr_t. You get a pointer to this
-        // struct by calling bcf_hdr_read, but you need to manually free
-        // the struct with bcf_hdr_destroy. Using a smart pointer wrapper,
-        // we can use RAII to manage the life cycle
+        // In htslib, the header is represented by the type bcf_hdr_t. 
+        // You get a pointer to this struct by calling bcf_hdr_read, but 
+        // you need to manually free the struct with bcf_hdr_destroy. 
+        // Using a smart pointer wrapper, we can use RAII to manage the life cycle
         using bcfHeader = HTS_UPTR(::bcf_hdr_t, bcf_hdr_destroy);
 
         // bcfHeader template generalization of HTSLibpp::htsHeader<T>
@@ -89,7 +86,7 @@ namespace YiCppLib {
                         return static_cast<bcf_idpair_t *>(nullptr);
                 }
             }
-        };
+        }; // END OF htsHeader<bcfHeader>
    
         // Now let's get to actually reading records from a bcf / vcf file.
         // Each record is represented as bcf1_t struct in htslib. For the
