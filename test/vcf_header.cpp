@@ -2,7 +2,11 @@
 #include "../htslibpp.h"
 #include "../htslibpp_variant.h"
 
+#include <string>
+#include <fstream>
+#include <streambuf>
 #include <algorithm>
+#include <cstdio>
 
 using namespace YiCppLib::HTSLibpp;
 
@@ -94,3 +98,22 @@ TEST_F(VcfHeader, CanIterateOverSampleDictionary) {
 
 // Tests for CREATE
 // Tests for WRITE
+
+TEST_F(VcfHeader, CanWriteHeaderUsingStreamOperator) {
+    auto header = htsHeader<bcfHeader>::read(htsFileHandler);
+
+    // forced scope so outHandle closes
+    {
+        auto outHandle = htsOpen("test-can-write-header-using-stream-operator.vcf", "w");
+        outHandle<<header;
+    }
+
+    std::ifstream t("test-can-write-header-using-stream-operator.vcf");
+    std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+    ASSERT_NE(str.length(), 0);
+
+    auto n = std::count(str.cbegin(), str.cend(), '\n');
+    ASSERT_EQ(n, 60);
+
+    remove("test-can-write-header-using-stream-operator.vcf");
+}

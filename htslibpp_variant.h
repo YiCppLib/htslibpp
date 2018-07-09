@@ -124,6 +124,19 @@ namespace YiCppLib {
             static iterator begin(htsFile& fp, const bcfHeader& hdr) { return iterator{fp, hdr}; }
             static iterator end(htsFile& fp, const bcfHeader& hdr)   { return iterator{fp, hdr, std::move(bcfRecord{nullptr})}; }
         };
+    
+        using bcfHdrRecPair = std::tuple<const bcfHeader&, const bcfRecord&>;
+
+        // operator<< overloads for easier outputting
+        htsFile& operator<<(htsFile& handle, const bcfHeader& header) {
+            bcf_hdr_write(handle.get(), header.get());
+            return handle;
+        }
+
+        htsFile& operator<<(htsFile& handle, bcfHdrRecPair recPair) {
+            bcf_write(handle.get(), std::get<0>(recPair).get(), std::get<1>(recPair).get());
+            return handle;
+        }
     }
 }
 
