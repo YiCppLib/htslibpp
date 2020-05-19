@@ -129,12 +129,12 @@ namespace YiCppLib {
 
         // operator<< overloads for easier outputting
         htsFile& operator<<(htsFile& handle, const bcfHeader& header) {
-            bcf_hdr_write(handle.get(), header.get());
+            auto ret = bcf_hdr_write(handle.get(), header.get());
             return handle;
         }
 
         htsFile& operator<<(htsFile& handle, bcfHdrRecPair recPair) {
-            bcf_write(handle.get(), std::get<0>(recPair).get(), std::get<1>(recPair).get());
+            auto ret = bcf_write(handle.get(), std::get<0>(recPair).get(), std::get<1>(recPair).get());
             return handle;
         }
     }
