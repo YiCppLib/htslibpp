@@ -90,7 +90,7 @@ namespace YiCppLib {
    
         // Now let's get to actually reading records from a bcf / vcf file.
         // Each record is represented as bcf1_t struct in htslib. For the
-        // purpose of performance, this struct is now allocated everytime
+        // purpose of performance, this struct is not allocated everytime
         // a record is fetched, but rather an already existing record,
         // being freshly allocated or not, is provided to the read function.
         using bcfRecord = HTS_UPTR(::bcf1_t, bcf_destroy);
